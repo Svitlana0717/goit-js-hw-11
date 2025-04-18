@@ -1,43 +1,35 @@
+// js/render-functions.js
 import SimpleLightbox from 'simplelightbox';
+import 'simplelightbox/dist/simple-lightbox.min.css';
 
-let lightbox;
-
-export function createGallery(images) {
-  const gallery = document.querySelector('.gallery');
+export const createGallery = (images) => {
+  const galleryContainer = document.querySelector('.gallery');
   const markup = images
     .map(
-      ({ webformatURL, largeImageURL, tags, likes, views, comments, downloads }) => `
-      <li>
-        <a href="${largeImageURL}">
-          <img src="${webformatURL}" alt="${tags}" />
-        </a>
-        <div class="info">
-          <p><b>Likes:</b> ${likes}</p>
-          <p><b>Views:</b> ${views}</p>
-          <p><b>Comments:</b> ${comments}</p>
-          <p><b>Downloads:</b> ${downloads}</p>
-        </div>
-      </li>`
+      ({ webformatURL, largeImageURL, tags }) => `
+        <li>
+          <a href="${largeImageURL}">
+            <img src="${webformatURL}" alt="${tags}" />
+          </a>
+        </li>`
     )
     .join('');
+  galleryContainer.innerHTML = markup;
+  const lightbox = new SimpleLightbox('.gallery a');
+  lightbox.refresh();
+};
 
-  gallery.insertAdjacentHTML('beforeend', markup);
+export const clearGallery = () => {
+  const galleryContainer = document.querySelector('.gallery');
+  galleryContainer.innerHTML = '';
+};
 
-  if (!lightbox) {
-    lightbox = new SimpleLightbox('.gallery a');
-  } else {
-    lightbox.refresh();
-  }
-}
+export const showLoader = () => {
+  const loader = document.querySelector('.loader');
+  loader.classList.add('visible');
+};
 
-export function clearGallery() {
-  document.querySelector('.gallery').innerHTML = '';
-}
-
-export function showLoader() {
-  document.querySelector('.loader').classList.remove('is-hidden');
-}
-
-export function hideLoader() {
-  document.querySelector('.loader').classList.add('is-hidden');
-}
+export const hideLoader = () => {
+  const loader = document.querySelector('.loader');
+  loader.classList.remove('visible');
+};
